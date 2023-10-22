@@ -8,6 +8,7 @@ function [FWHMl, FWHMp, FWHMr] = compute_airway_fwhm(source_rays, seg_rays, ...
 
     %Need to find the length of the ray - this need a loop
     number_of_rays = size(source_rays,2);
+ 
 
     FWHMl_r = nan(number_of_rays, 1);
     FWHMp_r = nan(number_of_rays, 1);
@@ -18,30 +19,34 @@ function [FWHMl, FWHMp, FWHMr] = compute_airway_fwhm(source_rays, seg_rays, ...
 
         CT_profile = source_rays(:,ray);
         seg_profile = seg_rays(:,ray);
-
+        
         % * Find the edge of the interpolated segmentation.
-        if seg_profile(1) < 0.5
+        if seg_profile(1) > 0.5
             continue % skip if seg edge does not exist
         end
-
+        
         % Identify the last vaule that is above the 0.5
         ind_ray = (seg_profile < 0.5);
+        %ind_ray = (seg_profile ==0.5);
         seg_half = find(ind_ray,1);
-
+        
         if all(ind_ray ~= 1)
             continue % skip if fail to find point <0.5
         end
 
+
         % * Find FWHM peak
         [max_int_array , max_location_array] = ...
             findpeaks(CT_profile);
-
+        
+        
         if isempty(max_int_array)
             continue % skip ray if peak does not exist
         end
 
         % identify the peak closest to seg half point
         index_diff = abs(max_location_array - seg_half);
+        
         [~,closest_max] = min(index_diff);
         % ensure the point is unique
         FWHMp = max_location_array(closest_max(1));
