@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # Define the file path of your CSV file
-csv_file = "example286_700.csv"
+csv_file = "output of the measurement_final.csv"
 
 # Read the CSV file into a DataFrame
 df = pd.read_csv(csv_file)
@@ -25,4 +25,4 @@ selected_columns_df = selected_columns_df.rename(columns={'stats_area_mean_1': '
 # Calculate the average, median, minimum, and maximum for each column
 column_stats = selected_columns_df.agg(['mean', 'median', 'min', 'max'])
 column_stats.index.name = f"(number of tubes: {len(df)})"
-column_stats.to_csv("example286_700_summary.csv", index=True)
+column_stats.to_csv("summary statistics.csv", index=True)

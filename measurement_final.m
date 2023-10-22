@@ -1,13 +1,13 @@
 %PATH setups 
-path = "/Users/seunghyun/comp3888/AirQuant/";
+path = "path to AirQuant";
 addpath(path + "/library/util");
 addpath(path);
 AirQuantDir = AirQuantAddPath();
 
 %Load DATA
-CT_name = path + "ct100.nii";
-seg_name = path + "gt100.nii";
-skel_name = path + "skel100at600.nii";
+CT_name = path + "CT-scan.nii";
+seg_name = path + "Airway.nii";
+skel_name = path + "Skeleton.nii";
 meta = niftiinfo(CT_name);
 source = double(niftiread(meta));
 seg = logical(niftiread(seg_name));
@@ -19,4 +19,4 @@ ray_interval = 0.5;%0.2;
 AQnet = ClinicalAirways(skel, source=source, header=meta, seg=seg, fillholes=1, largestCC=1, plane_sample_sz=0.5, spline_sample_sz=0.5);
 AQnet.MakeTubePatches(method='linear', gpu=0);
 AQnet.Measure('AirwayFWHMesl', num_rays, ray_interval);
-AQnet.ExportCSV('example600.csv');
+AQnet.ExportCSV('output.csv');
